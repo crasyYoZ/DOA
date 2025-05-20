@@ -1,0 +1,8 @@
+---
+- name: Test cOnnections
+  hosts: my_servers
+
+  tasks:
+
+  - name: ping my my_servers
+    ping:
