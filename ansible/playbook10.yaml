@@ -1,0 +1,33 @@
+---
+- name: Install apache2 and upload web-siTe
+  hosts: my_servers
+  become: yes
+
+  vars:
+    source_folder: ./site/
+    destin_folder: /var/www/html
+
+  tasks:
+  - block: #Debian
+    - name: unInstall apache2 Debian
+      apt: 
+        name: apache2
+        state: absent
+        autoremove: yes 
+
+    - name: remove file 
+      shell:
+        cmd: "rm -rf {{ destin_folder }}/*"
+    when: ansible_os_family=="Debian"
+
+  - block: #RedOS
+    - name: unInstall apache2 RedOS
+      dnf: 
+        name: httpd
+        state: absent
+        autoremove: yes
+
+    - name: remove file 
+      shell:
+        cmd: "rm -rf {{ destin_folder }}/*"
+    when: ansible_os_family=="RED"

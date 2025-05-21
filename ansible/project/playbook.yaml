@@ -1,0 +1,7 @@
+---
+- name: Web server role
+  hosts: my_servers
+  become: yes
+  
+  roles:
+  - role: web_server
