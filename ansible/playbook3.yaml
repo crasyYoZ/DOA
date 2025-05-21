@@ -1,0 +1,36 @@
+---
+- name: My Variables plyabook
+  hosts: my_servers
+  become: yes
+
+  vars:
+    message1: Hello
+    message2: World
+    secret: MyStrongSecret
+
+  tasks:
+  - name: Print secret
+    debug:
+      var: secret
+
+  - debug:
+      msg: "Secret Word: {{ secret }}"
+
+  - name:
+    debug:
+      msg: "This server owner is --->> {{ owner }} <<---"
+
+  - set_fact: full_message="{{ message1 }} {{ message2 }} from {{ owner }}"
+
+  - debug:
+      var: full_message
+
+  - debug:
+      var: ansible_os_family
+
+  - shell:
+      cmd: date
+    register: shell_result
+  
+  - debug:
+      var: shell_result.stdout

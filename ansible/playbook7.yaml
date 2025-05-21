@@ -1,0 +1,13 @@
+---
+- name: Install many packeges
+  hosts: client1
+  become: yes
+
+  tasks:
+  - name: install SW
+    apt: name={{ item }} state=latest
+    with_items:
+      - mc
+      - tree
+      - pip
+      - curl

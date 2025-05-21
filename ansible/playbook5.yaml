@@ -1,0 +1,47 @@
+---
+- name: Install apache2 and upload web-siTe
+  hosts: my_servers
+  become: yes
+
+  vars:
+    source_file: ./index.html
+    destin_file: /var/www/html
+
+  tasks:
+  - block: #Debian
+    - name: Install apache2 Debian
+      apt: name=apache2
+
+    - name: Upload web-site Debian
+      copy: src={{source_file}} dest={{destin_file}} mode=0644
+      notify: Restart Apache Debian
+
+    - name: StArt apache2 Debian
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+    when: ansible_os_family=="Debian"
+
+  - block: #RedOS
+    - name: Install apache2 RedOS
+      dnf: name=httpd
+
+    - name: Upload web-site RedOS
+      copy: src={{source_file}} dest={{destin_file}} mode=0644
+      notify: Restart Apache RedOS
+
+    - name: StArt apache2 RedOS
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    when: ansible_os_family=="RED"
+
+  handlers:
+  - name: Restart Apache Debian
+    service: name=apache2 state=restarted
+
+  - name: Restart Apache RedOS
+    service: name=httpd state=restarted
